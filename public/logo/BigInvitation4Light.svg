@@ -1,0 +1,17 @@
+<svg version="1.2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1531 308" width="1531" height="308">
+	<title>Logo</title>
+	<defs>
+		<image  width="1531" height="308" id="img1" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABfsAAAE0AQMAAAChIntyAAAAAXNSR0IB2cksfwAAAANQTFRF////p8QbyAAAAVJJREFUeJztzzENADAMwLCVP+mB6GFVihEk844bHbDVgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oD2ARPZATXRrKGOAAAAAElFTkSuQmCC"/>
+	</defs>
+	<style>
+		.s0 { fill: #c10000 } 
+		.s1 { paint-order:stroke fill markers;stroke: #000000;stroke-width: 6;stroke-linejoin: round;;fill: #ffffff } 
+		.s2 { paint-order:stroke fill markers;stroke: #ffffff;stroke-width: 6;stroke-linejoin: round;;fill: #000000 } 
+	</style>
+	<use id="Layer 0" style="display: none" href="#img1" x="0" y="0"/>
+	<g id="Group 1">
+		<path id="Rectangle 1" class="s0" d="m42 5.1h296.2v296.2h-296.2z"/>
+		<path id="BIG" class="s1" aria-label="BIG"  d="m93.1 190.9c0 11.2-7.4 17.1-20.2 17.1h-28.3v-34.9h27.8c12.9 0 20.7 6.5 20.7 17.8zm-3.8-62.3c0 10.8-7 16.4-19.6 16.4h-25.1v-33h25.1c12.6 0 19.6 5.8 19.6 16.6zm42.7 67.5c0-18-11.9-34.2-30.3-38 15.3-4.5 26.7-16.9 26.7-36 0-25-19.1-40.9-51.2-40.9h-71.1v157.8h73.5c33.3 0 52.4-16.9 52.4-42.9zm24.5 42.9h38.5v-157.8h-38.5zm142.4-159.7c-47.3 0-80.3 33.3-80.3 80.5 0 47.2 33.3 80.3 80.5 80.3 41.6 0 67.9-27.2 76-54.4v-35.8h-83.7v28.4h48.8c-5.8 17.7-19.1 27.8-38.2 27.8-27.7 0-44.3-17.1-44.3-46.3 0-27.4 16.4-45 41.2-45 14.3 0 25.1 5.7 31 16.2h42.5c-8.3-32.3-35.8-51.7-73.5-51.7z"/>
+		<path id="Invitation" class="s2" aria-label="Invitation"  d="m410.8 240h38.5v-157.8h-38.5zm155.2 0h38.2v-73.3c0-33.8-19.3-53.6-48.4-53.6-16.8 0-30.3 7.5-37.9 18v-16.6h-38.5v125.5h38.5v-68.2c0-17.1 9.4-26.5 24-26.5 14.6 0 24.1 9.4 24.1 26.5zm55.3-125.4l44.5 125.4h47.4l44.6-125.4h-41l-27.2 89.5-27.2-89.5zm154.9 125.4h38.5v-125.4h-38.5zm19.4-138.5c13.5 0 22.7-9.3 22.7-20.7 0-11.7-9.2-20.9-22.7-20.9-13.7 0-23 9.2-23 20.9 0 11.4 9.3 20.7 23 20.7zm55.3 94.9c0 32.6 18.2 43.6 44.3 43.6h19.5v-32.6h-13.7c-8.5 0-11.7-3.2-11.7-10.6v-50.4h25.2v-31.9h-25.2v-30.6h-38.4v30.6h-15.3v31.9h15.3zm79.8-19.3c0 39.6 24.5 64.8 55.1 64.8 18.7 0 31.9-8.6 38.9-19.6v17.8h38.4v-125.5h-38.4v17.8c-6.8-11.1-20-19.6-38.7-19.6-30.8 0-55.3 24.7-55.3 64.3zm94 0.2c0 20-12.8 31.1-27.4 31.1-14.4 0-27.5-11.3-27.5-31.3 0-20 13.1-30.8 27.5-30.8 14.6 0 27.4 11 27.4 31zm74.6 19.1c0 32.6 18.3 43.7 44.3 43.7h19.6v-32.6h-13.7c-8.6 0-11.7-3.2-11.7-10.6v-50.4h25.2v-31.9h-25.2v-30.6h-38.5v30.6h-15.2v31.9h15.2zm87.5 43.6h38.5v-125.4h-38.5zm19.3-138.5c13.5 0 22.8-9.2 22.8-20.7 0-11.7-9.3-20.9-22.8-20.9-13.7 0-22.9 9.2-22.9 20.9 0 11.5 9.2 20.7 22.9 20.7zm172 75.7c0-39.8-28.3-64.5-65.2-64.5-36.6 0-65.2 24.7-65.2 64.5 0 39.8 27.9 64.6 64.8 64.6 36.9 0 65.6-24.8 65.6-64.6zm-91.2 0c0-21.3 12.1-31.2 26-31.2 13.5 0 26.1 9.9 26.1 31.2 0 21.2-12.8 31.3-26.5 31.3-13.9 0-25.6-10.1-25.6-31.3zm200.5 62.8h38.2v-73.3c0-33.7-19.3-53.5-48.3-53.5-16.9 0-30.4 7.4-38 18v-16.7h-38.4v125.5h38.4v-68.1c0-17.1 9.4-26.6 24.1-26.6 14.6 0 24 9.5 24 26.6z"/>
+	</g>
+</svg>
