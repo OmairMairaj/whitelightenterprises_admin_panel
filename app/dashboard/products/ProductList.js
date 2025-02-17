@@ -75,7 +75,7 @@ function ProductList({ data }) {
               <TableHead>Description</TableHead>
               <TableHead>Created At</TableHead>
               <TableHead>Availability</TableHead>
-             
+
               <TableHead>Actions</TableHead>
             </TableRow>
           </TableHeader>
@@ -85,7 +85,7 @@ function ProductList({ data }) {
                 <TableCell>{index + 1}</TableCell>
                 <TableCell>
                   <img
-                    src={`${apiEndpoint}/images/${item.image}`}
+                    src={`${item.image}`}
                     alt={item.title}
                     className="w-24 h-24 object-cover rounded"
                   />
@@ -102,10 +102,10 @@ function ProductList({ data }) {
                 <TableCell>
                   {item.createdAt.date} {item.createdAt.time}
                 </TableCell>
-               
+
                 <TableCell>
                   <Badge variant={item.availability ? 'default' : 'destructive'}>
-                  {item.availability ? 'In Stock' : 'Out of Stock'}
+                    {item.availability ? 'In Stock' : 'Out of Stock'}
                   </Badge>
                 </TableCell>
                 <TableCell>

@@ -1,7 +1,7 @@
 import React, { useContext, useState, Suspense } from 'react';
 import CheckloginContext from '@/app/context/auth/CheckloginContext';
 import Link from 'next/link';
-import { LuArrowUpRight  } from "react-icons/lu";
+import { LuArrowUpRight } from "react-icons/lu";
 import {
   Table,
   TableBody,
@@ -89,7 +89,7 @@ function CatList({ data }) {
                 <TableCell>{index + 1}</TableCell>
                 <TableCell>
                   <img
-                    src={`${apiEndpoint}/images/${item.image}`}
+                    src={item.image}
                     alt={item.title}
                     className="w-24 h-24 object-cover rounded"
                   />
@@ -97,10 +97,10 @@ function CatList({ data }) {
                 <TableCell>{item.title}</TableCell>
                 <TableCell>
                   <Link href={`/dashboard/subcategory/list/${item.catId}`}>
-                   <div className='flex flex-row items-center'> {item.subcategoryCount} <LuArrowUpRight  /></div>
+                    <div className='flex flex-row items-center'> {item.subcategoryCount} <LuArrowUpRight /></div>
                   </Link>
                 </TableCell>
-               <TableCell>
+                <TableCell>
                   <div className="max-w-[200px] truncate">{item.description}</div>
                 </TableCell>
                 <TableCell>

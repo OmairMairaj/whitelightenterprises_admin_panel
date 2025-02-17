@@ -154,7 +154,7 @@ const AddProduct = () => {
     // Add the image as an object with the key "img"
     setAdditionalImages([
       ...additionalImages,
-      { img: fileData.postData.fileName },  // Add new image object to the list
+      { img: fileData.postData.secure_url },  // Add new image object to the list
     ]);
   };
 
@@ -326,9 +326,9 @@ const AddProduct = () => {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Product Image</FormLabel>
-                <Uploadimg 
+                <Uploadimg
                   showImg={true}
-                  onImageUpload={(fileData) => form.setValue('image', fileData.postData.fileName)}
+                  onImageUpload={(fileData) => form.setValue('image', fileData.postData.secure_url)}
                   Title="Upload Product Image"
                 />
                 <FormMessage />
@@ -342,9 +342,9 @@ const AddProduct = () => {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Hover Image</FormLabel>
-                <Uploadimg 
+                <Uploadimg
                   showImg={true}
-                  onImageUpload={(fileData) => form.setValue('hoverImage', fileData.postData.fileName)}
+                  onImageUpload={(fileData) => form.setValue('hoverImage', fileData.postData.secure_url)}
                   Title="Upload Hover Image"
                 />
                 <FormMessage />
@@ -361,7 +361,7 @@ const AddProduct = () => {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Additional Images</FormLabel>
-                <Uploadimg 
+                <Uploadimg
                   onImageUpload={handleAdditionalImageUpload}
                   Title="Upload Additional Images"
                   showImg={false}
@@ -372,7 +372,7 @@ const AddProduct = () => {
                       {additionalImages.map((imgObj, index) => (
                         <div key={index} className="w-24 h-24 relative">
                           <img
-                            src={`${apiEndpoint}/images/${imgObj.img}`}  // Access the image filename via img key
+                            src={`${imgObj.img}`}  // Access the image filename via img key
                             alt={`Additional Image ${index}`}
                             className="w-full h-full object-cover"
                           />
@@ -405,7 +405,7 @@ const AddProduct = () => {
                   <Select
                     disabled={loading}
                     onValueChange={(value) => field.onChange(value === 'true')}
-                    value={field.value.toString()} 
+                    value={field.value.toString()}
                   >
                     <SelectTrigger>
                       <SelectValue placeholder="Select Availability" />

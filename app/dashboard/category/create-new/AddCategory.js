@@ -75,7 +75,7 @@ const AddCategory = () => {
       // Get token from cookies
       const token = Cookies.get('token');
 
-     
+
 
       const response = await axios.post(
         `${apiEndpoint}/admin/add-Category`,
@@ -115,8 +115,8 @@ const AddCategory = () => {
   };
 
   const onImageUpload = (Filedata) => {
-    if (Filedata && Filedata.postData && Filedata.postData.fileName) {
-      form.setValue('imgUrl', Filedata.postData.fileName);
+    if (Filedata && Filedata.postData && Filedata.postData.secure_url) {
+      form.setValue('imgUrl', Filedata.postData.secure_url);
     }
   };
 
@@ -159,7 +159,7 @@ const AddCategory = () => {
                 </FormItem>
               )}
             />
-             <FormField
+            <FormField
               control={form.control}
               name="isActive"
               render={({ field }) => (
@@ -192,7 +192,7 @@ const AddCategory = () => {
               render={() => (
                 <FormItem>
                   <FormLabel>Category Image</FormLabel>
-                  <Uploadimg  showImg={true}
+                  <Uploadimg showImg={true}
                     onImageUpload={onImageUpload}
                     Title={'Upload Category Image'}
                   />
@@ -200,10 +200,10 @@ const AddCategory = () => {
                 </FormItem>
               )}
             />
-           
+
           </div>
           <Button disabled={loading} className="w-full md:w-auto" type="submit">
-           {loading?'please wait':' Create Category'}
+            {loading ? 'please wait' : ' Create Category'}
           </Button>
         </form>
       </Form>

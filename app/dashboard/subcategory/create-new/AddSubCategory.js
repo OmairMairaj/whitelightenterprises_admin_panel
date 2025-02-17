@@ -25,7 +25,7 @@ import {
 import { useToast } from '@/components/ui/use-toast';
 import axios from 'axios';
 
-const AddCategory = ({catId}) => {
+const AddCategory = ({ catId }) => {
   const router = useRouter();
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
@@ -66,7 +66,7 @@ const AddCategory = ({catId}) => {
       setLoading(true);
 
       const payload = {
-        catId:catId,
+        catId: catId,
         image: data.imgUrl,
         title: data.name,
         description: data.description,
@@ -76,7 +76,7 @@ const AddCategory = ({catId}) => {
       // Get token from cookies
       const token = Cookies.get('token');
 
-     
+
 
       const response = await axios.post(
         `${apiEndpoint}/admin/add-sub-category`,
@@ -116,8 +116,8 @@ const AddCategory = ({catId}) => {
   };
 
   const onImageUpload = (Filedata) => {
-    if (Filedata && Filedata.postData && Filedata.postData.fileName) {
-      form.setValue('imgUrl', Filedata.postData.fileName);
+    if (Filedata && Filedata.postData && Filedata.postData.secure_url) {
+      form.setValue('imgUrl', Filedata.postData.secure_url);
     }
   };
 
@@ -160,7 +160,7 @@ const AddCategory = ({catId}) => {
                 </FormItem>
               )}
             />
-             <FormField
+            <FormField
               control={form.control}
               name="isActive"
               render={({ field }) => (
@@ -193,7 +193,7 @@ const AddCategory = ({catId}) => {
               render={() => (
                 <FormItem>
                   <FormLabel>Category Image</FormLabel>
-                  <Uploadimg  showImg={true}
+                  <Uploadimg showImg={true}
                     onImageUpload={onImageUpload}
                     Title={'Upload Category Image'}
                   />
@@ -201,10 +201,10 @@ const AddCategory = ({catId}) => {
                 </FormItem>
               )}
             />
-           
+
           </div>
           <Button disabled={loading} className="w-full md:w-auto" type="submit">
-           {loading?'please wait':' Create Category'}
+            {loading ? 'please wait' : ' Create Category'}
           </Button>
         </form>
       </Form>
