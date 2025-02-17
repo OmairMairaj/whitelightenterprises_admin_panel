@@ -23,16 +23,11 @@ export default function AuthenticationPage() {
           Admin Panel
         </div>
         <div className="relative z-20 mt-auto">
-          <div className="flex flex-col gap-1 text-xs">
-            <div className='flex flex-row gap-2 items-center'>
-              <span>Made in</span>
-              <img src='/india.png' className="w-4 h-4 object-cover rounded" />
-            </div>
-            <div className='flex flex-row gap-2 items-center'>
-              <span>Developed and Design by</span>
-             <a href='https://instagram.com/raj.kr.p' target='_blank' className='underline font-semibold'>rkp.developer</a>
-            </div>
-
+          <div className="flex flex-row gap-2 items-center">
+            <span>Developed and Design by</span>
+            <a href="/" target="_blank" className="underline font-semibold">
+              Sa analytics
+            </a>
           </div>
         </div>
       </div>
