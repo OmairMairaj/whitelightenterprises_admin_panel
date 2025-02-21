@@ -44,7 +44,7 @@ const EditProduct = ({ PData }) => {
     hoverImage: PData.hoverImage || '',
     availability: PData.availability || true,
     category: PData.catId || '',
-    subcategory: PData.subCatId || '', 
+    subcategory: PData.subCatId || '',
   };
 
   const form = useForm({ defaultValues });
@@ -169,7 +169,7 @@ const EditProduct = ({ PData }) => {
   // Handle image upload for additional images
   const handleAdditionalImageUpload = (fileData) => {
     setAdditionalImages([
-      { img: fileData.postData.fileName }, // Add the new image at the beginning
+      { img: fileData.postData.secure_url }, // Add the new image at the beginning
       ...additionalImages, // Spread the existing images after the new one
     ]);
   };
@@ -344,14 +344,14 @@ const EditProduct = ({ PData }) => {
                 <FormLabel>Product Image</FormLabel>
                 <div>
                   <Uploadimg
-                     showImg={false}
-                    onImageUpload={(fileData) => form.setValue('image', fileData.postData.fileName)}
+                    showImg={false}
+                    onImageUpload={(fileData) => form.setValue('image', fileData.postData.secure_url)}
                     Title="Upload Product Image"
                   />
 
                   <div className='mt-2'>
                     {form.watch('image') && (
-                      <img src={`${apiEndpoint}/images/${form.watch('image')}`} alt="Product Image" className="w-24 h-24 object-cover rounded" />
+                      <img src={`${form.watch('image')}`} alt="Product Image" className="w-24 h-24 object-cover rounded" />
                     )}
                   </div>
                 </div>
@@ -369,12 +369,12 @@ const EditProduct = ({ PData }) => {
                 <div>
                   <Uploadimg
                     showImg={false}
-                    onImageUpload={(fileData) => form.setValue('hoverImage', fileData.postData.fileName)}
+                    onImageUpload={(fileData) => form.setValue('hoverImage', fileData.postData.secure_url)}
                     Title="Upload Hover Image"
                   />
                   <div className='mt-2'>
                     {form.watch('hoverImage') && (
-                      <img src={`${apiEndpoint}/images/${form.watch('hoverImage')}`} alt="Hover Image" className="w-24 h-24 object-cover rounded" />
+                      <img src={`${form.watch('hoverImage')}`} alt="Hover Image" className="w-24 h-24 object-cover rounded" />
                     )}
                   </div>
                 </div>
@@ -403,7 +403,7 @@ const EditProduct = ({ PData }) => {
                       {additionalImages.map((imgObj, index) => (
                         <div key={index} className="w-24 h-24 relative">
                           <img
-                            src={`${apiEndpoint}/images/${imgObj.img}`} // Display image
+                            src={`${imgObj.img}`} // Display image
                             alt={`Additional Image ${index}`}
                             className="w-full h-full object-cover"
                           />

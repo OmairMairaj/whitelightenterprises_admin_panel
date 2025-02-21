@@ -25,8 +25,8 @@ import {
 import { useToast } from '@/components/ui/use-toast';
 import axios from 'axios';
 
-const EditCategory = ({catData}) => {
-  console.log('catData',catData)
+const EditCategory = ({ catData }) => {
+  console.log('catData', catData)
   const router = useRouter();
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
@@ -67,7 +67,7 @@ const EditCategory = ({catData}) => {
       setLoading(true);
 
       const payload = {
-        subCatId:catData.subCatId,
+        subCatId: catData.subCatId,
         image: data.imgUrl,
         title: data.name,
         description: data.description,
@@ -77,7 +77,7 @@ const EditCategory = ({catData}) => {
       // Get token from cookies
       const token = Cookies.get('token');
 
-     
+
 
       const response = await axios.post(
         `${apiEndpoint}/admin/edit-sub-category`,
@@ -117,8 +117,8 @@ const EditCategory = ({catData}) => {
   };
 
   const onImageUpload = (Filedata) => {
-    if (Filedata && Filedata.postData && Filedata.postData.fileName) {
-      form.setValue('imgUrl', Filedata.postData.fileName);
+    if (Filedata && Filedata.postData && Filedata.postData.secure_url) {
+      form.setValue('imgUrl', Filedata.postData.secure_url);
     }
   };
 
@@ -161,7 +161,7 @@ const EditCategory = ({catData}) => {
                 </FormItem>
               )}
             />
-             <FormField
+            <FormField
               control={form.control}
               name="isActive"
               render={({ field }) => (
@@ -194,7 +194,7 @@ const EditCategory = ({catData}) => {
               render={() => (
                 <FormItem>
                   <FormLabel>Category Image</FormLabel>
-                  <Uploadimg  showImg={true}
+                  <Uploadimg showImg={true}
                     onImageUpload={onImageUpload}
                     Title={'Upload Category Image'}
                   />
@@ -202,10 +202,10 @@ const EditCategory = ({catData}) => {
                 </FormItem>
               )}
             />
-           
+
           </div>
           <Button disabled={loading} className="w-full md:w-auto" type="submit">
-           {loading?'please wait':' Update Category'}
+            {loading ? 'please wait' : ' Update Category'}
           </Button>
         </form>
       </Form>
