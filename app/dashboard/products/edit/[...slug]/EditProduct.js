@@ -441,8 +441,8 @@ const EditProduct = ({ PData }) => {
             name="additional_img_cap_1"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Caption for Image 1</FormLabel>
-                <Input {...field} placeholder="Enter caption for Image 1" />
+                <FormLabel>Caption for Additional Image 1</FormLabel>
+                <Input {...field} placeholder="Enter caption for Additional Image 1" />
                 <FormMessage />
               </FormItem>
             )}
@@ -452,8 +452,8 @@ const EditProduct = ({ PData }) => {
             name="additional_img_cap_2"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Caption for Image 2</FormLabel>
-                <Input {...field} placeholder="Enter caption for Image 2" />
+                <FormLabel>Caption for Additional Image 2</FormLabel>
+                <Input {...field} placeholder="Enter caption for Additional Image 2" />
                 <FormMessage />
               </FormItem>
             )}
@@ -463,8 +463,8 @@ const EditProduct = ({ PData }) => {
             name="additional_img_cap_3"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Caption for Image 3</FormLabel>
-                <Input {...field} placeholder="Enter caption for Image 3" />
+                <FormLabel>Caption for Additional Image 3</FormLabel>
+                <Input {...field} placeholder="Enter caption for Additional Image 3" />
                 <FormMessage />
               </FormItem>
             )}
@@ -474,8 +474,8 @@ const EditProduct = ({ PData }) => {
             name="additional_img_cap_4"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Caption for Image 4</FormLabel>
-                <Input {...field} placeholder="Enter caption for Image 4" />
+                <FormLabel>Caption for Additional Image 4</FormLabel>
+                <Input {...field} placeholder="Enter caption for Additional Image 4" />
                 <FormMessage />
               </FormItem>
             )}
@@ -485,8 +485,8 @@ const EditProduct = ({ PData }) => {
             name="additional_img_cap_5"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Caption for Image 5</FormLabel>
-                <Input {...field} placeholder="Enter caption for Image 5" />
+                <FormLabel>Caption for Additional Image 5</FormLabel>
+                <Input {...field} placeholder="Enter caption for Additional Image 5" />
                 <FormMessage />
               </FormItem>
             )}
