@@ -45,6 +45,11 @@ const AddProduct = () => {
     availability: true,
     category: '',
     subcategory: '',
+    additional_img_cap_1: '',
+    additional_img_cap_2: '',
+    additional_img_cap_3: '',
+    additional_img_cap_4: '',
+    additional_img_cap_5: '',
   };
 
   const form = useForm({ defaultValues });
@@ -108,6 +113,11 @@ const AddProduct = () => {
       category: data.category,
       subcategory: data.subcategory || null,
       additionalImages,  // Include additionalImages in the payload
+      additional_img_cap_1: data.additional_img_cap_1,
+      additional_img_cap_2: data.additional_img_cap_2,
+      additional_img_cap_3: data.additional_img_cap_3,
+      additional_img_cap_4: data.additional_img_cap_4,
+      additional_img_cap_5: data.additional_img_cap_5,
     };
 
     try {
@@ -392,6 +402,27 @@ const AddProduct = () => {
             )}
           />
         </div>
+
+        {/* Additional Image Captions */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+          {[1, 2, 3, 4, 5].map((index) => (
+            <FormField
+              key={index}
+              control={form.control}
+              name={`additional_img_cap_${index}`}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Caption for Additional Image {index}</FormLabel>
+                  <FormControl>
+                    <Input disabled={loading} placeholder={`Caption for image ${index}`} {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          ))}
+        </div>
+
 
         {/* Availability */}
         <div className="grid grid-cols-1 gap-5">

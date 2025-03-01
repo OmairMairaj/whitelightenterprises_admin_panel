@@ -45,6 +45,11 @@ const EditProduct = ({ PData }) => {
     availability: PData.availability || true,
     category: PData.catId || '',
     subcategory: PData.subCatId || '',
+    additional_img_cap_1: PData.additional_img_cap_1 || '',
+    additional_img_cap_2: PData.additional_img_cap_2 || '',
+    additional_img_cap_3: PData.additional_img_cap_3 || '',
+    additional_img_cap_4: PData.additional_img_cap_4 || '',
+    additional_img_cap_5: PData.additional_img_cap_5 || '',
   };
 
   const form = useForm({ defaultValues });
@@ -125,6 +130,11 @@ const EditProduct = ({ PData }) => {
       category: data.category,
       subcategory: data.subcategory || null,
       additionalImages,
+      additional_img_cap_1: data.additional_img_cap_1,
+      additional_img_cap_2: data.additional_img_cap_2,
+      additional_img_cap_3: data.additional_img_cap_3,
+      additional_img_cap_4: data.additional_img_cap_4,
+      additional_img_cap_5: data.additional_img_cap_5,
     };
 
     try {
@@ -418,6 +428,65 @@ const EditProduct = ({ PData }) => {
                     </div>
                   )}
                 </div>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+
+        {/* Caption Fields */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+          <FormField
+            control={form.control}
+            name="additional_img_cap_1"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Caption for Image 1</FormLabel>
+                <Input {...field} placeholder="Enter caption for Image 1" />
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="additional_img_cap_2"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Caption for Image 2</FormLabel>
+                <Input {...field} placeholder="Enter caption for Image 2" />
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="additional_img_cap_3"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Caption for Image 3</FormLabel>
+                <Input {...field} placeholder="Enter caption for Image 3" />
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="additional_img_cap_4"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Caption for Image 4</FormLabel>
+                <Input {...field} placeholder="Enter caption for Image 4" />
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="additional_img_cap_5"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Caption for Image 5</FormLabel>
+                <Input {...field} placeholder="Enter caption for Image 5" />
                 <FormMessage />
               </FormItem>
             )}
