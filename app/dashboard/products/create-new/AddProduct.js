@@ -50,6 +50,7 @@ const AddProduct = () => {
     additional_img_cap_3: '',
     additional_img_cap_4: '',
     additional_img_cap_5: '',
+    bannerImage: '',
   };
 
   const form = useForm({ defaultValues });
@@ -118,7 +119,10 @@ const AddProduct = () => {
       additional_img_cap_3: data.additional_img_cap_3,
       additional_img_cap_4: data.additional_img_cap_4,
       additional_img_cap_5: data.additional_img_cap_5,
+      bannerImage: data.bannerImage,
     };
+
+    console.log('Payload:', payload); // Log the payload for debugging
 
     try {
       setLoading(true);
@@ -329,6 +333,24 @@ const AddProduct = () => {
         </div>
 
         {/* Image Uploads */}
+        <div className="grid grid-cols-1 gap-5">
+          <FormField
+            control={form.control}
+            name="bannerImage"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Banner Image</FormLabel>
+                <Uploadimg
+                  showImg={true}
+                  onImageUpload={(fileData) => form.setValue('bannerImage', fileData.postData.secure_url)}
+                  Title="Upload Banner Image"
+                />
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
           <FormField
             control={form.control}

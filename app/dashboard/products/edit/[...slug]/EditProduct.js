@@ -50,6 +50,7 @@ const EditProduct = ({ PData }) => {
     additional_img_cap_3: PData.additional_img_cap_3 || '',
     additional_img_cap_4: PData.additional_img_cap_4 || '',
     additional_img_cap_5: PData.additional_img_cap_5 || '',
+    bannerImage: PData.bannerImage || '',
   };
 
   const form = useForm({ defaultValues });
@@ -135,6 +136,7 @@ const EditProduct = ({ PData }) => {
       additional_img_cap_3: data.additional_img_cap_3,
       additional_img_cap_4: data.additional_img_cap_4,
       additional_img_cap_5: data.additional_img_cap_5,
+      bannerImage: data.bannerImage,
     };
 
     try {
@@ -345,6 +347,33 @@ const EditProduct = ({ PData }) => {
         </div>
 
         {/* Image Uploads */}
+
+        <div className="grid grid-cols-1 gap-5">
+          <FormField
+            control={form.control}
+            name="bannerImage"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Banner Image</FormLabel>
+                <div>
+                  <Uploadimg
+                    showImg={false}
+                    onImageUpload={(fileData) => form.setValue('bannerImage', fileData.postData.secure_url)}
+                    Title="Upload Banner Image"
+                  />
+
+                  <div className='mt-2'>
+                    {form.watch('bannerImage') && (
+                      <img src={`${form.watch('bannerImage')}`} alt="Banner Image" className="w-full h-40 object-contain rounded" />
+                    )}
+                  </div>
+                </div>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
           <FormField
             control={form.control}
