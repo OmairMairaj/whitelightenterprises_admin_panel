@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useForm } from 'react-hook-form';
 import Cookies from 'js-cookie';
 import { useRouter } from 'next/navigation';
@@ -24,6 +24,164 @@ import {
 } from '@/components/ui/select';
 import { useToast } from '@/components/ui/use-toast';
 import { FaTrash } from 'react-icons/fa'; // Import React Icon for trash
+import dynamic from 'next/dynamic';
+import 'react-quill/dist/quill.snow.css';
+import axios from 'axios';
+import { Progress } from '@/components/ui/progress';
+import CheckloginContext from '@/app/context/auth/CheckloginContext';
+import { useDropzone } from 'react-dropzone';
+
+// Import React Quill dynamically to avoid SSR issues
+const ReactQuill = dynamic(() => import('react-quill'), {
+  ssr: false,
+  loading: () => <p>Loading editor...</p>,
+});
+
+// Add PDF upload component
+const UploadPDF = ({ onPDFUpload, Title }) => {
+  const Contextdata = useContext(CheckloginContext);
+  const { toast } = useToast();
+
+  const [errorUploading, setErrorUploading] = useState(false);
+  const [errorUploadingMsg, setErrorUploadingMsg] = useState('');
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [uploadedFiles, setUploadedFiles] = useState([]);
+  const [isUploading, setIsUploading] = useState(false);
+
+  const uploadFilesToCloudinary = async (file) => {
+    setIsUploading(true);
+    setUploadProgress(0);
+    
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+
+      // Ensure the file has a proper name and extension
+      const fileName = file.name || `pdf_${Date.now()}.pdf`;
+      
+      const response = await fetch('/api/upload-attachments', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${Contextdata.JwtToken}`,
+        },
+        body: formData,
+      });
+
+      if (!response.ok) {
+        const errorData = await response.text();
+        console.error('Upload failed:', {
+          status: response.status,
+          statusText: response.statusText,
+          errorData
+        });
+        throw new Error(`Upload failed: ${response.status} ${response.statusText}`);
+      }
+
+      const data = await response.json();
+
+      if (data.urls && Array.isArray(data.urls) && data.urls.length > 0) {
+        console.log("✅ Upload successful:", data);
+        const fileData = {
+          postData: {
+            secure_url: data.urls[0],
+            fileName: fileName
+          },
+          postType: 'application/pdf'
+        };
+        onPDFUpload(fileData);
+        setUploadedFiles([fileData]);
+        
+        toast({
+          title: "Success",
+          description: "PDF uploaded successfully"
+        });
+      } else {
+        throw new Error('Upload failed: No URL received');
+      }
+    } catch (error) {
+      console.error('Upload error:', {
+        message: error.message,
+        error: error
+      });
+      
+      setErrorUploading(true);
+      setErrorUploadingMsg(error.message || 'Failed to upload file');
+      
+      toast({
+        variant: "destructive",
+        title: "Upload failed",
+        description: error.message || 'Failed to upload file'
+      });
+    } finally {
+      setIsUploading(false);
+      setUploadProgress(0);
+    }
+  };
+
+  const onDrop = async (acceptedFiles) => {
+    let file = acceptedFiles[0];
+    if (!file) return;
+
+    if (file.type !== 'application/pdf') {
+      toast({
+        variant: "destructive",
+        title: "Invalid file",
+        description: "Please upload a PDF file"
+      });
+      return;
+    }
+
+    await uploadFilesToCloudinary(file);
+  };
+
+  const { getRootProps, getInputProps } = useDropzone({
+    onDrop,
+    accept: {
+      'application/pdf': ['.pdf']
+    },
+    maxSize: 10 * 1024 * 1024, // 10MB
+    multiple: false
+  });
+
+  return (
+    <div className="space-y-4">
+      <div
+        {...getRootProps()}
+        className={`rounded border-2 border-dashed p-4 text-center hover:cursor-pointer transition-colors ${
+          errorUploading ? 'border-red-300 bg-red-50' : 'border-gray-300 hover:border-gray-400'
+        }`}
+      >
+        <input {...getInputProps()} />
+        <div className="text-sm">
+          {uploadedFiles.length > 0 ? '✅ PDF Added - Click or drag to replace' : Title}
+        </div>
+      </div>
+      
+      {isUploading && (
+        <div className="space-y-2">
+          <div className="text-sm text-blue-600">Uploading...</div>
+          <Progress value={uploadProgress} className="h-2" />
+          <div className="text-xs text-gray-500 text-right">{uploadProgress.toFixed(1)}%</div>
+        </div>
+      )}
+      
+      {errorUploading && (
+        <div className="text-sm text-red-500 bg-red-50 p-2 rounded">
+          {errorUploadingMsg}
+        </div>
+      )}
+      
+      {uploadedFiles.length > 0 && (
+        <div className="text-sm text-green-600 bg-green-50 p-2 rounded flex items-center gap-2">
+          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+          </svg>
+          <span>Uploaded: {uploadedFiles[0].postData.fileName}</span>
+        </div>
+      )}
+    </div>
+  );
+};
 
 const AddProduct = () => {
   const router = useRouter();
@@ -33,6 +191,7 @@ const AddProduct = () => {
   const [subcategories, setSubcategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('');
   const [additionalImages, setAdditionalImages] = useState([]); // State to hold additional images
+  const Contextdata = useContext(CheckloginContext);
 
   const defaultValues = {
     name: '',
@@ -51,19 +210,17 @@ const AddProduct = () => {
     additional_img_cap_4: '',
     additional_img_cap_5: '',
     bannerImage: '',
+    pdfFile: '', // Add PDF field
   };
 
   const form = useForm({ defaultValues });
-
-  // Get token from cookies
-  const token = Cookies.get('token');
 
   // Fetch categories from the API on component mount
   useEffect(() => {
     fetch(`${apiEndpoint}/admin/category-list-all`, {
       method: 'POST',
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${Contextdata.JwtToken}`,
         'Content-Type': 'application/json',
       },
     })
@@ -76,7 +233,7 @@ const AddProduct = () => {
       .catch((error) => {
         console.error('Error fetching categories:', error);
       });
-  }, [token]);
+  }, [Contextdata.JwtToken]);
 
   // Handle category change, fetch corresponding subcategories
   const handleCategoryChange = (categoryId) => {
@@ -84,7 +241,7 @@ const AddProduct = () => {
     fetch(`${apiEndpoint}/admin/sub-category-list-all`, {
       method: 'POST',
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${Contextdata.JwtToken}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ categoryId }),
@@ -120,8 +277,14 @@ const AddProduct = () => {
       additional_img_cap_4: data.additional_img_cap_4,
       additional_img_cap_5: data.additional_img_cap_5,
       bannerImage: data.bannerImage,
+      pdfFile: data.pdfFile ? {
+        url: data.pdfFile.url,
+        fileName: data.pdfFile.fileName,
+        public_id: data.pdfFile.public_id
+      } : null,
     };
 
+    console.log('Submitting with PDF:', data.pdfFile);
     console.log('Payload:', payload); // Log the payload for debugging
 
     try {
@@ -130,7 +293,7 @@ const AddProduct = () => {
       const response = await fetch(`${apiEndpoint}/admin/add-product`, {
         method: 'POST',
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${Contextdata.JwtToken}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(payload),
@@ -177,6 +340,17 @@ const AddProduct = () => {
     const newImages = [...additionalImages];
     newImages.splice(index, 1); // Remove the image at the specified index
     setAdditionalImages(newImages);
+  };
+
+  // Add this before the return statement
+  const modules = {
+    toolbar: [
+      [{ 'header': [1, 2, 3, false] }],
+      ['bold', 'italic', 'underline', 'strike'],
+      [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+      ['link'],
+      ['clean']
+    ],
   };
 
   return (
@@ -308,9 +482,18 @@ const AddProduct = () => {
             name="shortDescription"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Short Description</FormLabel>
+                <FormLabel>Description</FormLabel>
                 <FormControl>
-                  <Input disabled={loading} placeholder="Short description of product" {...field} />
+                  <div className="min-h-[200px]">
+                    <ReactQuill
+                      theme="snow"
+                      value={field.value}
+                      onChange={field.onChange}
+                      modules={modules}
+                      className="h-[200px] mb-12"
+                      placeholder="Description of product"
+                    />
+                  </div>
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -322,9 +505,9 @@ const AddProduct = () => {
             name="description"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Description</FormLabel>
+                <FormLabel>Specifications</FormLabel>
                 <FormControl>
-                  <Input disabled={loading} placeholder="Full description of product" {...field} />
+                  <Input disabled={loading} placeholder="Full Specifications of product" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -445,6 +628,32 @@ const AddProduct = () => {
           ))}
         </div>
 
+        {/* PDF Upload */}
+        <div className="grid grid-cols-1 gap-5">
+          <FormField
+            control={form.control}
+            name="pdfFile"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Product Documentation (PDF)</FormLabel>
+                <FormControl>
+                  <UploadPDF
+                    onPDFUpload={(fileData) => {
+                      console.log('PDF Upload Data:', fileData);
+                      form.setValue('pdfFile', {
+                        url: fileData.postData.secure_url,
+                        fileName: fileData.postData.fileName,
+                        public_id: fileData.postData.public_id
+                      });
+                    }}
+                    Title="Upload Product Documentation (Manual, Specifications, etc.)"
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
 
         {/* Availability */}
         <div className="grid grid-cols-1 gap-5">
@@ -485,3 +694,5 @@ const AddProduct = () => {
 };
 
 export default AddProduct;
+
+

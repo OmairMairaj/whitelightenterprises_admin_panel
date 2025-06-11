@@ -12,6 +12,14 @@ const nextConfig = {
   },
   eslint: {
     ignoreDuringBuilds: true
+  },
+  async rewrites() {
+    return [
+      {
+        source: '/api/:path*',
+        destination: 'https://whitelightenterprises-backend.vercel.app/admin/:path*'
+      }
+    ]
   }
 };
 
