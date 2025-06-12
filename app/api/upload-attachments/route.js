@@ -5,7 +5,7 @@ import { v2 as cloudinary } from 'cloudinary';
 cloudinary.config({
   cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
+  api_secret: process.env.CLOUDINARY_API_SECRET
 });
 
 export async function POST(req) {
@@ -39,10 +39,10 @@ export async function POST(req) {
     const result = await new Promise((resolve, reject) => {
       const uploadStream = cloudinary.uploader.upload_stream(
         {
-          folder: 'stock_attachments',
+          folder: 'whitelight_categories',
           resource_type: resourceType,
           format: fileExtension,
-          public_id: `stock_attachments/${fileNameWithoutExt}`,
+          public_id: `whitelight_categories/${fileNameWithoutExt}`,
         },
         (error, result) => {
           if (error) {
@@ -67,7 +67,7 @@ export async function POST(req) {
   } catch (error) {
     console.error('🚨 Upload Error:', error);
     return NextResponse.json(
-      { 
+      {
         message: 'Failed to upload file',
         error: error.message
       },
