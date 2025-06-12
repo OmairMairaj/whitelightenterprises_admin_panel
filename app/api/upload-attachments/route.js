@@ -27,29 +27,40 @@ export async function POST(req) {
     // Get file details
     const fileName = file.name || `file_${Date.now()}`;
     const fileNameWithoutExt = fileName.split('.')[0];
-    const fileExtension = fileName.split('.').pop() || 'pdf';
+    const fileExtension = fileName.split('.').pop()?.toLowerCase() || 'pdf';
 
     // Determine resource type based on file type
     let resourceType = "raw"; // Default for PDFs and documents
-    if (file.type.includes("image")) {
+    if (file.type && file.type.startsWith("image/")) {
       resourceType = "image";
+    } else if (file.type && file.type.startsWith("video/")) {
+      resourceType = "video";
     }
 
     // Upload to Cloudinary
     const result = await new Promise((resolve, reject) => {
+      const uploadOptions = {
+        folder: 'whitelight_categories',
+        resource_type: resourceType,
+        public_id: `whitelight_categories/${fileNameWithoutExt}_${Date.now()}`,
+        use_filename: true,
+        unique_filename: false,
+      };
+
+      // Only add format for non-image files
+      // Cloudinary handles image format conversion automatically
+      if (resourceType === "raw") {
+        uploadOptions.format = fileExtension;
+      }
+
       const uploadStream = cloudinary.uploader.upload_stream(
-        {
-          folder: 'stock_attachments',
-          resource_type: resourceType,
-          format: fileExtension,
-          public_id: `stock_attachments/${fileNameWithoutExt}`,
-        },
+        uploadOptions,
         (error, result) => {
           if (error) {
             console.error('❌ Cloudinary upload failed:', error);
             reject(error);
           } else {
-            console.log("✅ Upload successful:", result);
+            console.log("✅ Upload successful:", result?.public_id);
             resolve(result);
           }
         }
@@ -60,18 +71,20 @@ export async function POST(req) {
 
     // Return the response in the expected format
     return NextResponse.json({
-      message: 'Files uploaded successfully',
-      urls: [result.secure_url],
+      message: 'File uploaded successfully',
+      url: result.secure_url,
+      public_id: result.public_id,
+      resource_type: result.resource_type,
     }, { status: 201 });
 
   } catch (error) {
     console.error('🚨 Upload Error:', error);
     return NextResponse.json(
-      { 
+      {
         message: 'Failed to upload file',
         error: error.message
       },
       { status: 500 }
     );
   }
-} 
+}

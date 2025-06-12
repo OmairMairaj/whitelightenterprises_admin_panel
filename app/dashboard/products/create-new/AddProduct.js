@@ -51,14 +51,14 @@ const UploadPDF = ({ onPDFUpload, Title }) => {
   const uploadFilesToCloudinary = async (file) => {
     setIsUploading(true);
     setUploadProgress(0);
-    
+
     try {
       const formData = new FormData();
       formData.append('file', file);
 
       // Ensure the file has a proper name and extension
       const fileName = file.name || `pdf_${Date.now()}.pdf`;
-      
+
       const response = await fetch('/api/upload-attachments', {
         method: 'POST',
         headers: {
@@ -78,13 +78,14 @@ const UploadPDF = ({ onPDFUpload, Title }) => {
       }
 
       const data = await response.json();
-
-      if (data.urls && Array.isArray(data.urls) && data.urls.length > 0) {
+console.log(data);
+      if (data.url) {
         console.log("✅ Upload successful:", data);
         const fileData = {
           postData: {
-            secure_url: data.urls[0],
-            fileName: fileName
+            secure_url: data.url,
+            fileName: fileName,
+            public_id:data.public_id
           },
           postType: 'application/pdf'
         };
@@ -259,6 +260,7 @@ const AddProduct = () => {
 
   // Handle the submission of the form
   const onSubmit = async (data) => {
+    console.log('form',data);
     const payload = {
       name: data.name,
       price: data.price,
@@ -277,11 +279,7 @@ const AddProduct = () => {
       additional_img_cap_4: data.additional_img_cap_4,
       additional_img_cap_5: data.additional_img_cap_5,
       bannerImage: data.bannerImage,
-      pdfFile: data.pdfFile ? {
-        url: data.pdfFile.url,
-        fileName: data.pdfFile.fileName,
-        public_id: data.pdfFile.public_id
-      } : null,
+      pdfFile: data.pdfFile.url,
     };
 
     console.log('Submitting with PDF:', data.pdfFile);
