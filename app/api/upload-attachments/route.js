@@ -5,7 +5,7 @@ import { v2 as cloudinary } from 'cloudinary';
 cloudinary.config({
   cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET
+  api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
 export async function POST(req) {
@@ -40,9 +40,9 @@ export async function POST(req) {
     // Upload to Cloudinary
     const result = await new Promise((resolve, reject) => {
       const uploadOptions = {
-        folder: 'whitelight_categories',
+        folder: 'stock_attachments',
         resource_type: resourceType,
-        public_id: `whitelight_categories/${fileNameWithoutExt}_${Date.now()}`,
+        public_id: `stock_attachments/${fileNameWithoutExt}_${Date.now()}`,
         use_filename: true,
         unique_filename: false,
       };
@@ -54,16 +54,7 @@ export async function POST(req) {
       }
 
       const uploadStream = cloudinary.uploader.upload_stream(
-<<<<<<< HEAD
         uploadOptions,
-=======
-        {
-          folder: 'whitelight_categories',
-          resource_type: resourceType,
-          format: fileExtension,
-          public_id: `whitelight_categories/${fileNameWithoutExt}`,
-        },
->>>>>>> 5f5fd7e6fc0b687c4bffabb1806d214bd7a20a83
         (error, result) => {
           if (error) {
             console.error('❌ Cloudinary upload failed:', error);

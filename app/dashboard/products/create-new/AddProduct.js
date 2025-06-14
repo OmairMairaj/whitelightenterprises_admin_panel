@@ -78,14 +78,13 @@ const UploadPDF = ({ onPDFUpload, Title }) => {
       }
 
       const data = await response.json();
-console.log(data);
+
       if (data.url) {
         console.log("✅ Upload successful:", data);
         const fileData = {
           postData: {
             secure_url: data.url,
-            fileName: fileName,
-            public_id:data.public_id
+            fileName: fileName
           },
           postType: 'application/pdf'
         };
@@ -260,7 +259,6 @@ const AddProduct = () => {
 
   // Handle the submission of the form
   const onSubmit = async (data) => {
-    console.log('form',data);
     const payload = {
       name: data.name,
       price: data.price,

@@ -322,7 +322,7 @@ const EditProduct = ({ PData }) => {
             name="shortDescription"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Short Description</FormLabel>
+                <FormLabel>Description</FormLabel>
                 <FormControl>
                   <Input disabled={loading} placeholder="Short description of product" {...field} />
                 </FormControl>
@@ -336,7 +336,7 @@ const EditProduct = ({ PData }) => {
             name="description"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Description</FormLabel>
+                <FormLabel>Specifications</FormLabel>
                 <FormControl>
                   <Input disabled={loading} placeholder="Full description of product" {...field} />
                 </FormControl>
