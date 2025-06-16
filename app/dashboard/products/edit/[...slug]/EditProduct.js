@@ -29,7 +29,7 @@ import { useDropzone } from 'react-dropzone';
 import { Progress } from '@/components/ui/progress';
 
 // Dynamically import ReactQuill to avoid SSR issues
-const ReactQuill = dynamic(() => import('react-quill'), { 
+const ReactQuill = dynamic(() => import('react-quill'), {
   ssr: false,
   loading: () => <div className="h-32 bg-gray-100 animate-pulse rounded"></div>
 });
@@ -94,7 +94,7 @@ const UploadPDF = ({ onPDFUpload, Title, initialPDF }) => {
           },
           postType: 'application/pdf'
         }]);
-        
+
         toast({
           title: "Success",
           description: "PDF uploaded successfully"
@@ -107,10 +107,10 @@ const UploadPDF = ({ onPDFUpload, Title, initialPDF }) => {
         message: error.message,
         error: error
       });
-      
+
       setErrorUploading(true);
       setErrorUploadingMsg(error.message || 'Failed to upload file');
-      
+
       toast({
         variant: "destructive",
         title: "Upload failed",
@@ -151,16 +151,15 @@ const UploadPDF = ({ onPDFUpload, Title, initialPDF }) => {
     <div className="space-y-4">
       <div
         {...getRootProps()}
-        className={`rounded border-2 border-dashed p-4 text-center hover:cursor-pointer transition-colors ${
-          errorUploading ? 'border-red-300 bg-red-50' : 'border-gray-300 hover:border-gray-400'
-        }`}
+        className={`rounded border-2 border-dashed p-4 text-center hover:cursor-pointer transition-colors ${errorUploading ? 'border-red-300 bg-red-50' : 'border-gray-300 hover:border-gray-400'
+          }`}
       >
         <input {...getInputProps()} />
         <div className="text-sm">
           {uploadedFiles.length > 0 ? '✅ PDF Added - Click or drag to replace' : Title}
         </div>
       </div>
-      
+
       {isUploading && (
         <div className="space-y-2">
           <div className="text-sm text-blue-600">Uploading...</div>
@@ -168,13 +167,13 @@ const UploadPDF = ({ onPDFUpload, Title, initialPDF }) => {
           <div className="text-xs text-gray-500 text-right">{uploadProgress.toFixed(1)}%</div>
         </div>
       )}
-      
+
       {errorUploading && (
         <div className="text-sm text-red-500 bg-red-50 p-2 rounded">
           {errorUploadingMsg}
         </div>
       )}
-      
+
       {uploadedFiles.length > 0 && (
         <div className="text-sm text-green-600 bg-green-50 p-2 rounded flex items-center gap-2">
           <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
@@ -182,9 +181,9 @@ const UploadPDF = ({ onPDFUpload, Title, initialPDF }) => {
           </svg>
           <span>Uploaded: {uploadedFiles[0].postData.fileName}</span>
           {uploadedFiles[0].postData.secure_url && (
-            <a 
-              href={uploadedFiles[0].postData.secure_url} 
-              target="_blank" 
+            <a
+              href={uploadedFiles[0].postData.secure_url}
+              target="_blank"
               rel="noopener noreferrer"
               className="ml-2 text-blue-600 hover:text-blue-800"
             >
@@ -235,13 +234,13 @@ const EditProduct = ({ PData }) => {
       [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
       ['bold', 'italic', 'underline', 'strike'],
       [{ 'color': [] }, { 'background': [] }],
-      [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-      [{ 'indent': '-1'}, { 'indent': '+1' }],
+      [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+      [{ 'indent': '-1' }, { 'indent': '+1' }],
       [{ 'align': [] }],
       ['link', 'image'],
       ['clean'],
       ['blockquote'],
-      [{ 'script': 'sub'}, { 'script': 'super' }]
+      [{ 'script': 'sub' }, { 'script': 'super' }]
     ],
   };
 
@@ -523,7 +522,7 @@ const EditProduct = ({ PData }) => {
               <FormItem>
                 <FormLabel>Description</FormLabel>
                 <FormControl>
-                  <div className="bg-white">
+                  <div className="bg-black">
                     <ReactQuill
                       theme="snow"
                       value={field.value || ''}
