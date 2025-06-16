@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import Cookies from 'js-cookie';
 import { useRouter } from 'next/navigation';
+import dynamic from 'next/dynamic';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import Uploadimg from '@/app/Comp/Uploadimg';
@@ -23,7 +24,178 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { useToast } from '@/components/ui/use-toast';
-import { FaTrash } from 'react-icons/fa'; // Import React Icon for trash
+import { FaTrash } from 'react-icons/fa';
+import { useDropzone } from 'react-dropzone';
+import { Progress } from '@/components/ui/progress';
+
+// Dynamically import ReactQuill to avoid SSR issues
+const ReactQuill = dynamic(() => import('react-quill'), { 
+  ssr: false,
+  loading: () => <div className="h-32 bg-gray-100 animate-pulse rounded"></div>
+});
+
+// Import Quill styles
+import 'react-quill/dist/quill.snow.css';
+
+// Add PDF upload component
+const UploadPDF = ({ onPDFUpload, Title, initialPDF }) => {
+  const { toast } = useToast();
+  const token = Cookies.get('token');
+
+  const [errorUploading, setErrorUploading] = useState(false);
+  const [errorUploadingMsg, setErrorUploadingMsg] = useState('');
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [uploadedFiles, setUploadedFiles] = useState(initialPDF ? [{
+    postData: {
+      secure_url: initialPDF,
+      fileName: 'Existing PDF'
+    },
+    postType: 'application/pdf'
+  }] : []);
+  const [isUploading, setIsUploading] = useState(false);
+
+  const uploadFilesToCloudinary = async (file) => {
+    setIsUploading(true);
+    setUploadProgress(0);
+
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const fileName = file.name || `pdf_${Date.now()}.pdf`;
+
+      const response = await fetch('/api/upload-attachments', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+        body: formData,
+      });
+
+      if (!response.ok) {
+        const errorData = await response.text();
+        console.error('Upload failed:', {
+          status: response.status,
+          statusText: response.statusText,
+          errorData
+        });
+        throw new Error(`Upload failed: ${response.status} ${response.statusText}`);
+      }
+
+      const data = await response.json();
+
+      if (data.url) {
+        console.log("✅ Upload successful:", data);
+        onPDFUpload(data.url);
+        setUploadedFiles([{
+          postData: {
+            secure_url: data.url,
+            fileName: fileName
+          },
+          postType: 'application/pdf'
+        }]);
+        
+        toast({
+          title: "Success",
+          description: "PDF uploaded successfully"
+        });
+      } else {
+        throw new Error('Upload failed: No URL received');
+      }
+    } catch (error) {
+      console.error('Upload error:', {
+        message: error.message,
+        error: error
+      });
+      
+      setErrorUploading(true);
+      setErrorUploadingMsg(error.message || 'Failed to upload file');
+      
+      toast({
+        variant: "destructive",
+        title: "Upload failed",
+        description: error.message || 'Failed to upload file'
+      });
+    } finally {
+      setIsUploading(false);
+      setUploadProgress(0);
+    }
+  };
+
+  const onDrop = async (acceptedFiles) => {
+    let file = acceptedFiles[0];
+    if (!file) return;
+
+    if (file.type !== 'application/pdf') {
+      toast({
+        variant: "destructive",
+        title: "Invalid file",
+        description: "Please upload a PDF file"
+      });
+      return;
+    }
+
+    await uploadFilesToCloudinary(file);
+  };
+
+  const { getRootProps, getInputProps } = useDropzone({
+    onDrop,
+    accept: {
+      'application/pdf': ['.pdf']
+    },
+    maxSize: 10 * 1024 * 1024, // 10MB
+    multiple: false
+  });
+
+  return (
+    <div className="space-y-4">
+      <div
+        {...getRootProps()}
+        className={`rounded border-2 border-dashed p-4 text-center hover:cursor-pointer transition-colors ${
+          errorUploading ? 'border-red-300 bg-red-50' : 'border-gray-300 hover:border-gray-400'
+        }`}
+      >
+        <input {...getInputProps()} />
+        <div className="text-sm">
+          {uploadedFiles.length > 0 ? '✅ PDF Added - Click or drag to replace' : Title}
+        </div>
+      </div>
+      
+      {isUploading && (
+        <div className="space-y-2">
+          <div className="text-sm text-blue-600">Uploading...</div>
+          <Progress value={uploadProgress} className="h-2" />
+          <div className="text-xs text-gray-500 text-right">{uploadProgress.toFixed(1)}%</div>
+        </div>
+      )}
+      
+      {errorUploading && (
+        <div className="text-sm text-red-500 bg-red-50 p-2 rounded">
+          {errorUploadingMsg}
+        </div>
+      )}
+      
+      {uploadedFiles.length > 0 && (
+        <div className="text-sm text-green-600 bg-green-50 p-2 rounded flex items-center gap-2">
+          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+          </svg>
+          <span>Uploaded: {uploadedFiles[0].postData.fileName}</span>
+          {uploadedFiles[0].postData.secure_url && (
+            <a 
+              href={uploadedFiles[0].postData.secure_url} 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="ml-2 text-blue-600 hover:text-blue-800"
+            >
+              View PDF
+            </a>
+          )}
+        </div>
+      )}
+    </div>
+  );
+};
 
 const EditProduct = ({ PData }) => {
   const router = useRouter();
@@ -32,7 +204,8 @@ const EditProduct = ({ PData }) => {
   const [categories, setCategories] = useState([]);
   const [subcategories, setSubcategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('');
-  const [additionalImages, setAdditionalImages] = useState(PData.additionalImages || []); // Set default images
+  const [additionalImages, setAdditionalImages] = useState(PData.additionalImages || []);
+  const [pdfFile, setPdfFile] = useState(PData.pdfFile || '');
 
   const defaultValues = {
     name: PData.title || '',
@@ -51,9 +224,33 @@ const EditProduct = ({ PData }) => {
     additional_img_cap_4: PData.additional_img_cap_4 || '',
     additional_img_cap_5: PData.additional_img_cap_5 || '',
     bannerImage: PData.bannerImage || '',
+    pdfFile: PData.pdfFile || '',
   };
 
   const form = useForm({ defaultValues });
+
+  // Rich text editor configuration
+  const quillModules = {
+    toolbar: [
+      [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+      ['bold', 'italic', 'underline', 'strike'],
+      [{ 'color': [] }, { 'background': [] }],
+      [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+      [{ 'indent': '-1'}, { 'indent': '+1' }],
+      [{ 'align': [] }],
+      ['link', 'image'],
+      ['clean'],
+      ['blockquote'],
+      [{ 'script': 'sub'}, { 'script': 'super' }]
+    ],
+  };
+
+  const quillFormats = [
+    'header', 'bold', 'italic', 'underline', 'strike',
+    'color', 'background', 'list', 'bullet', 'indent',
+    'align', 'link', 'image', 'clean', 'blockquote',
+    'script'
+  ];
 
   // Get token from cookies
   const token = Cookies.get('token');
@@ -78,10 +275,9 @@ const EditProduct = ({ PData }) => {
       });
 
     if (PData.catId) {
-      // When component mounts and there is a selected category (from PData)
       handleCategoryChange(PData.catId);
     }
-  }, [PData.catId, token]); // Trigger only when PData.catId changes
+  }, [PData.catId, token]);
 
   // Handle category change, fetch corresponding subcategories
   const handleCategoryChange = (categoryId) => {
@@ -99,13 +295,11 @@ const EditProduct = ({ PData }) => {
         if (data.status) {
           setSubcategories(data.subcategories);
 
-          // Ensure the form value for subcategory is updated if subCatId exists in PData
           if (PData.subCatId) {
             const matchingSubcategory = data.subcategories.find(
               (subcategory) => subcategory.subCatId === PData.subCatId
             );
             if (matchingSubcategory) {
-              // Set the form value for subcategory after fetching
               form.setValue('subcategory', PData.subCatId);
             }
           }
@@ -137,6 +331,7 @@ const EditProduct = ({ PData }) => {
       additional_img_cap_4: data.additional_img_cap_4,
       additional_img_cap_5: data.additional_img_cap_5,
       bannerImage: data.bannerImage,
+      pdfFile: pdfFile,
     };
 
     try {
@@ -181,8 +376,8 @@ const EditProduct = ({ PData }) => {
   // Handle image upload for additional images
   const handleAdditionalImageUpload = (fileData) => {
     setAdditionalImages([
-      { img: fileData.postData.secure_url }, // Add the new image at the beginning
-      ...additionalImages, // Spread the existing images after the new one
+      { img: fileData.postData.secure_url },
+      ...additionalImages,
     ]);
   };
 
@@ -191,6 +386,10 @@ const EditProduct = ({ PData }) => {
     const newImages = [...additionalImages];
     newImages.splice(index, 1);
     setAdditionalImages(newImages);
+  };
+
+  const handlePDFUpload = (pdfUrl) => {
+    setPdfFile(pdfUrl);
   };
 
   return (
@@ -211,7 +410,7 @@ const EditProduct = ({ PData }) => {
                       disabled={loading}
                       onValueChange={(value) => {
                         field.onChange(value);
-                        handleCategoryChange(value); // Trigger fetching subcategories
+                        handleCategoryChange(value);
                       }}
                       value={field.value}
                     >
@@ -324,7 +523,21 @@ const EditProduct = ({ PData }) => {
               <FormItem>
                 <FormLabel>Description</FormLabel>
                 <FormControl>
-                  <Input disabled={loading} placeholder="Short description of product" {...field} />
+                  <div className="bg-white">
+                    <ReactQuill
+                      theme="snow"
+                      value={field.value || ''}
+                      onChange={field.onChange}
+                      modules={quillModules}
+                      formats={quillFormats}
+                      placeholder="Enter detailed product description with formatting..."
+                      style={{
+                        height: '200px',
+                        marginBottom: '50px'
+                      }}
+                      readOnly={loading}
+                    />
+                  </div>
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -338,7 +551,7 @@ const EditProduct = ({ PData }) => {
               <FormItem>
                 <FormLabel>Specifications</FormLabel>
                 <FormControl>
-                  <Input disabled={loading} placeholder="Full description of product" {...field} />
+                  <Input disabled={loading} placeholder="description of product" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -347,7 +560,6 @@ const EditProduct = ({ PData }) => {
         </div>
 
         {/* Image Uploads */}
-
         <div className="grid grid-cols-1 gap-5">
           <FormField
             control={form.control}
@@ -442,11 +654,12 @@ const EditProduct = ({ PData }) => {
                       {additionalImages.map((imgObj, index) => (
                         <div key={index} className="w-24 h-24 relative">
                           <img
-                            src={`${imgObj.img}`} // Display image
+                            src={`${imgObj.img}`}
                             alt={`Additional Image ${index}`}
                             className="w-full h-full object-cover"
                           />
                           <button
+                            type="button"
                             onClick={() => handleImageDelete(index)}
                             className="absolute top-0 right-0 bg-red-500 text-white p-1 rounded-full"
                           >
@@ -550,6 +763,19 @@ const EditProduct = ({ PData }) => {
             )}
           />
         </div>
+
+        {/* Add PDF upload section */}
+        <FormItem>
+          <FormLabel>Product PDF</FormLabel>
+          <FormControl>
+            <UploadPDF
+              onPDFUpload={handlePDFUpload}
+              Title="Click or drag and drop to upload PDF"
+              initialPDF={PData.pdfFile}
+            />
+          </FormControl>
+          <FormMessage />
+        </FormItem>
 
         {/* Submit Button */}
         <Button disabled={loading} className="w-full md:w-auto" type="submit">
