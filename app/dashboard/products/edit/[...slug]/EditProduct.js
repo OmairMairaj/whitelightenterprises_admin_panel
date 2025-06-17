@@ -522,7 +522,7 @@ const EditProduct = ({ PData }) => {
               <FormItem>
                 <FormLabel>Description</FormLabel>
                 <FormControl>
-                  <div className="bg-black">
+                  <div className="">
                     <ReactQuill
                       theme="snow"
                       value={field.value || ''}
