@@ -7,9 +7,9 @@
     "url": "https://github.com/rkpymb"
   },
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
+    "dev": "node init && next dev",
+    "build": "node init && next build",
+    "start": "node init && next start",
     "prod:start": "next start",
     "lint": "next lint",
     "format": "prettier . --write",
