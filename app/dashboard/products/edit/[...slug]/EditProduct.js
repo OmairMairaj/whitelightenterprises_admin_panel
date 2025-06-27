@@ -143,7 +143,7 @@ const UploadPDF = ({ onPDFUpload, Title, initialPDF }) => {
     accept: {
       'application/pdf': ['.pdf']
     },
-    maxSize: 10 * 1024 * 1024, // 10MB
+    maxSize: 30 * 1024 * 1024, // 30MB
     multiple: false
   });
 
