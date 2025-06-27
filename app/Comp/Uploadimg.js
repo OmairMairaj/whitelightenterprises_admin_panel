@@ -50,8 +50,8 @@ const UploadFiles = ({ onImageUpload, Title, showImg }) => {
       // **Compress Image Before Uploading**
       try {
         const options = {
-          maxSizeMB: 0.5, // Set max size to 500KB
-          maxWidthOrHeight: 800, // Resize to 800px width/height max
+          maxSizeMB: 10, // Set max size to 10MB
+          maxWidthOrHeight: 1920, // Resize to 800px width/height max
           useWebWorker: true,
         };
 
