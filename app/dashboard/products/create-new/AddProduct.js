@@ -90,7 +90,7 @@ const UploadPDF = ({ onPDFUpload, Title }) => {
         };
         onPDFUpload(fileData);
         setUploadedFiles([fileData]);
-        
+
         toast({
           title: "Success",
           description: "PDF uploaded successfully"
@@ -103,10 +103,10 @@ const UploadPDF = ({ onPDFUpload, Title }) => {
         message: error.message,
         error: error
       });
-      
+
       setErrorUploading(true);
       setErrorUploadingMsg(error.message || 'Failed to upload file');
-      
+
       toast({
         variant: "destructive",
         title: "Upload failed",
@@ -139,7 +139,7 @@ const UploadPDF = ({ onPDFUpload, Title }) => {
     accept: {
       'application/pdf': ['.pdf']
     },
-    maxSize: 10 * 1024 * 1024, // 10MB
+    maxSize: 30 * 1024 * 1024, // 30MB
     multiple: false
   });
 
@@ -147,16 +147,15 @@ const UploadPDF = ({ onPDFUpload, Title }) => {
     <div className="space-y-4">
       <div
         {...getRootProps()}
-        className={`rounded border-2 border-dashed p-4 text-center hover:cursor-pointer transition-colors ${
-          errorUploading ? 'border-red-300 bg-red-50' : 'border-gray-300 hover:border-gray-400'
-        }`}
+        className={`rounded border-2 border-dashed p-4 text-center hover:cursor-pointer transition-colors ${errorUploading ? 'border-red-300 bg-red-50' : 'border-gray-300 hover:border-gray-400'
+          }`}
       >
         <input {...getInputProps()} />
         <div className="text-sm">
           {uploadedFiles.length > 0 ? '✅ PDF Added - Click or drag to replace' : Title}
         </div>
       </div>
-      
+
       {isUploading && (
         <div className="space-y-2">
           <div className="text-sm text-blue-600">Uploading...</div>
@@ -164,13 +163,13 @@ const UploadPDF = ({ onPDFUpload, Title }) => {
           <div className="text-xs text-gray-500 text-right">{uploadProgress.toFixed(1)}%</div>
         </div>
       )}
-      
+
       {errorUploading && (
         <div className="text-sm text-red-500 bg-red-50 p-2 rounded">
           {errorUploadingMsg}
         </div>
       )}
-      
+
       {uploadedFiles.length > 0 && (
         <div className="text-sm text-green-600 bg-green-50 p-2 rounded flex items-center gap-2">
           <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
@@ -343,7 +342,7 @@ const AddProduct = () => {
     toolbar: [
       [{ 'header': [1, 2, 3, false] }],
       ['bold', 'italic', 'underline', 'strike'],
-      [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+      [{ 'list': 'ordered' }, { 'list': 'bullet' }],
       ['link'],
       ['clean']
     ],
